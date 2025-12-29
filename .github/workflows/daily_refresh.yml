@@ -1,0 +1,36 @@
+name: Daily Data Refresh
+
+on:
+  schedule:
+    # Runs daily at 9 AM UTC (2:30 PM IST)
+    - cron: '0 9 * * *'
+  workflow_dispatch:  # Allows manual trigger
+
+jobs:
+  refresh-data:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    
+    - name: Install dependencies
+      run: |
+        pip install pandas numpy requests
+    
+    - name: Run pipeline
+      run: |
+        python run_pipeline.py
+    
+    - name: Commit and push data
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add data/raw/*.csv outputs/*.csv
+        git diff --staged --quiet || git commit -m "Auto-refresh: Update data $(date +'%Y-%m-%d')"
+        git push
+

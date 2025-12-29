@@ -1,0 +1,25 @@
+#!/bin/bash
+# Convenience wrapper script - works on macOS and Linux
+# Usage: ./run pipeline | dashboard | view
+
+case "$1" in
+    pipeline)
+        python3 run_pipeline.py
+        ;;
+    dashboard)
+        streamlit run dashboard.py
+        ;;
+    view)
+        python3 view_outputs.py
+        ;;
+    *)
+        echo "Usage: ./run {pipeline|dashboard|view}"
+        echo ""
+        echo "Commands:"
+        echo "  pipeline  - Run the complete data pipeline"
+        echo "  dashboard - Launch the Streamlit dashboard"
+        echo "  view      - View outputs in terminal"
+        exit 1
+        ;;
+esac
+
