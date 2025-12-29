@@ -16,7 +16,6 @@ from pathlib import Path
 from datetime import datetime, timedelta
 import sys
 import time
-import time
 
 # Page configuration
 st.set_page_config(

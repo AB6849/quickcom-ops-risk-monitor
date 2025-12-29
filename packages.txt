@@ -1,3 +1,0 @@
-# Streamlit Cloud requires packages.txt for system dependencies
-# This file is optional but can be used if needed
-

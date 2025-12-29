@@ -1,0 +1,24 @@
+========================================
+SSH KEY FOR GITHUB
+========================================
+
+I've generated an SSH key. Add it to GitHub:
+
+YOUR SSH PUBLIC KEY:
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBWw+zeSZLymwvgBZ/kn39j1bjmT94vjWQLiE6FSQAPx github-push
+
+QUICK STEPS:
+1. Go to: https://github.com/settings/keys
+2. Click "New SSH key"
+3. Title: quickcom-ops-risk-monitor
+4. Paste the key above
+5. Click "Add SSH key"
+
+THEN RUN:
+git push -u origin main
+
+YOUR REPOSITORY WILL BE:
+https://github.com/AB6849/quickcom-ops-risk-monitor
+
+========================================
+
