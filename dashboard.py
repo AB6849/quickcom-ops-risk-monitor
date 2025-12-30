@@ -178,16 +178,49 @@ def main():
     
     st.markdown("---")
     
-    # Alerts Section
+    # Alerts Section - Filter by selected date
+    # Get high-risk cities for the selected date
+    date_alerts = filtered_df[filtered_df['risk_classification'] == 'High'].copy()
+    
+    # If we have alerts from the alerts file for this date, use those (they have alert_reason)
     if len(alerts_df) > 0:
+        alerts_for_date = alerts_df[alerts_df['date'] == selected_date].copy()
+        if len(alerts_for_date) > 0:
+            # Use alerts from file (has alert_reason)
+            date_alerts = alerts_for_date.copy()
+        else:
+            # Generate alert reasons from filtered data
+            if len(date_alerts) > 0:
+                date_alerts['alert_reason'] = date_alerts.apply(
+                    lambda row: f"High traffic congestion ({row.get('traffic_risk', 0):.2f}); "
+                               f"Heavy rainfall ({row.get('weather_risk', 0):.1f}mm); "
+                               f"Demand surge ({row.get('demand_risk', 0):.2f})" 
+                               if 'traffic_risk' in row else "Multiple risk factors",
+                    axis=1
+                )
+    
+    # Display alerts for selected date
+    if len(date_alerts) > 0:
         st.header("High-Risk Alerts")
         
-        alert_cols = st.columns(len(alerts_df))
-        for idx, (_, alert) in enumerate(alerts_df.iterrows()):
-            with alert_cols[idx % len(alert_cols)]:
-                st.error(f"**{alert['city']}**")
-                st.write(f"Risk Score: **{alert['risk_score']:.1f}**")
-                st.caption(alert.get('alert_reason', 'Multiple risk factors'))
+        # Sort by risk score (highest first)
+        date_alerts = date_alerts.sort_values('risk_score', ascending=False)
+        
+        # Create columns for alerts (max 4 per row for better display)
+        num_alerts = len(date_alerts)
+        cols_per_row = min(4, num_alerts)
+        num_rows = (num_alerts + cols_per_row - 1) // cols_per_row
+        
+        for row in range(num_rows):
+            alert_cols = st.columns(cols_per_row)
+            for col_idx in range(cols_per_row):
+                alert_idx = row * cols_per_row + col_idx
+                if alert_idx < num_alerts:
+                    alert = date_alerts.iloc[alert_idx]
+                    with alert_cols[col_idx]:
+                        st.error(f"**{alert['city']}**")
+                        st.write(f"Risk Score: **{alert['risk_score']:.1f}**")
+                        st.caption(alert.get('alert_reason', 'Multiple risk factors'))
         
         st.markdown("---")
     
