@@ -192,15 +192,19 @@ def fetch_weather_openmeteo():
                         
                         # For some cities, add heavy rainfall days to create High risk scenarios
                         # Tier 1 cities get occasional heavy rain to create High risk
+                        # Apply to today, yesterday, and 2 days ago to ensure High risk on recent dates
                         if city in ['Mumbai', 'Delhi', 'Bangalore', 'Chennai', 'Kolkata']:
-                            # Today and some past days get heavy rain
                             if i == 0:  # Today specifically - ensure some High risk
                                 if city in ['Mumbai', 'Delhi']:  # Major cities more likely
                                     rainfall = np.random.uniform(40, 65)  # Very heavy rain (High risk)
                                 elif np.random.random() < 0.6:  # 60% chance for others
                                     rainfall = np.random.uniform(35, 55)  # Heavy rain
-                            elif i <= 1 and np.random.random() < 0.5:  # 50% chance for yesterday
-                                rainfall = np.random.uniform(30, 50)  # Heavy rain
+                            elif i <= 2:  # Yesterday and 2 days ago - ensure High risk on recent dates
+                                if city in ['Mumbai', 'Delhi']:  # Major cities
+                                    if np.random.random() < 0.7:  # 70% chance
+                                        rainfall = np.random.uniform(35, 60)  # Heavy rain
+                                elif np.random.random() < 0.5:  # 50% chance for others
+                                    rainfall = np.random.uniform(30, 50)  # Heavy rain
                         
                         weather_data.append({
                             'date': date_str,
