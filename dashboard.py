@@ -5,6 +5,8 @@ A professional dashboard for displaying operational risk scores and alerts.
 Perfect for interview demonstrations.
 
 Run with: streamlit run dashboard.py
+
+Last updated: 2025-12-30
 """
 
 import streamlit as st
