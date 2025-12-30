@@ -389,7 +389,7 @@ def main():
     
     with col1:
         # Component Comparison
-        st.subheader("Average Risk by Component")
+        st.markdown("### 📊 Average Risk by Component")
         
         if len(filtered_df) > 0:
             components = ['traffic_risk', 'weather_risk', 'demand_risk']
@@ -417,7 +417,7 @@ def main():
     
     with col2:
         # Risk Trend Over Time
-        st.subheader("Risk Trend (Last 7 Days)")
+        st.markdown("### 📉 Risk Trend (Last 7 Days)")
         
         # Get last 7 days of data
         trend_start = selected_date - timedelta(days=7)
