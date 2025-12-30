@@ -155,8 +155,8 @@ def main():
         (risk_df['risk_classification'].isin(risk_levels))
     ].copy()
     
-    # Key Metrics Row
-    st.header("Key Metrics")
+    # Key Metrics Row with Enhanced Styling
+    st.markdown("### 📊 Key Metrics")
     col1, col2, col3, col4, col5 = st.columns(5)
     
     total_cities = len(filtered_df)
@@ -166,15 +166,40 @@ def main():
     avg_risk_score = filtered_df['risk_score'].mean()
     
     with col1:
-        st.metric("Total Cities", total_cities)
+        st.metric(
+            "Total Cities", 
+            total_cities,
+            help="Total number of cities being monitored"
+        )
     with col2:
-        st.metric("High Risk", high_risk, delta=None)
+        st.metric(
+            "High Risk", 
+            high_risk, 
+            delta=None,
+            delta_color="inverse",
+            help="Cities requiring immediate attention"
+        )
     with col3:
-        st.metric("Medium Risk", medium_risk, delta=None)
+        st.metric(
+            "Medium Risk", 
+            medium_risk, 
+            delta=None,
+            help="Cities needing monitoring"
+        )
     with col4:
-        st.metric("Low Risk", low_risk, delta=None)
+        st.metric(
+            "Low Risk", 
+            low_risk, 
+            delta=None,
+            help="Cities operating normally"
+        )
     with col5:
-        st.metric("Avg Risk Score", f"{avg_risk_score:.1f}", delta=None)
+        st.metric(
+            "Avg Risk Score", 
+            f"{avg_risk_score:.1f}", 
+            delta=None,
+            help="Average risk score across all cities"
+        )
     
     st.markdown("---")
     
@@ -199,16 +224,16 @@ def main():
                     axis=1
                 )
     
-    # Display alerts for selected date
+    # Display alerts for selected date with Enhanced Design
     if len(date_alerts) > 0:
-        st.header("High-Risk Alerts")
+        st.markdown("### 🚨 High-Risk Alerts")
         
         # Sort by risk score (highest first)
         date_alerts = date_alerts.sort_values('risk_score', ascending=False)
         
-        # Create columns for alerts (max 4 per row for better display)
+        # Create columns for alerts (max 3 per row for better visibility)
         num_alerts = len(date_alerts)
-        cols_per_row = min(4, num_alerts)
+        cols_per_row = min(3, num_alerts)
         num_rows = (num_alerts + cols_per_row - 1) // cols_per_row
         
         for row in range(num_rows):
@@ -218,9 +243,21 @@ def main():
                 if alert_idx < num_alerts:
                     alert = date_alerts.iloc[alert_idx]
                     with alert_cols[col_idx]:
-                        st.error(f"**{alert['city']}**")
-                        st.write(f"Risk Score: **{alert['risk_score']:.1f}**")
-                        st.caption(alert.get('alert_reason', 'Multiple risk factors'))
+                        # Custom alert card with gradient
+                        st.markdown(f"""
+                            <div style="
+                                background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+                                border-radius: 1rem;
+                                padding: 1.5rem;
+                                color: white;
+                                box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
+                                margin-bottom: 1rem;
+                            ">
+                                <h3 style="color: white; margin: 0 0 0.5rem 0; font-size: 1.5rem;">{alert['city']}</h3>
+                                <p style="color: white; font-size: 2rem; font-weight: 700; margin: 0.5rem 0;">{alert['risk_score']:.1f}</p>
+                                <p style="color: rgba(255, 255, 255, 0.9); font-size: 0.9rem; margin: 0.5rem 0 0 0;">{alert.get('alert_reason', 'Multiple risk factors')}</p>
+                            </div>
+                        """, unsafe_allow_html=True)
         
         st.markdown("---")
     
@@ -229,7 +266,7 @@ def main():
     
     with col_left:
         # Risk Score by City (Bar Chart) - Top 20
-        st.subheader("Top 20 Cities by Risk Score")
+        st.markdown("### 📈 Top 20 Cities by Risk Score")
         
         if len(filtered_df) > 0:
             # Sort by risk score (highest first) and take top 20
@@ -267,7 +304,20 @@ def main():
                 height=600,
                 showlegend=False,
                 xaxis_range=[0, 100],
-                margin=dict(l=150, r=50, t=20, b=50)
+                margin=dict(l=150, r=50, t=20, b=50),
+                plot_bgcolor='rgba(0,0,0,0)',
+                paper_bgcolor='rgba(0,0,0,0)',
+                font=dict(family="Arial, sans-serif", size=12),
+                xaxis=dict(
+                    gridcolor='rgba(128, 128, 128, 0.2)',
+                    gridwidth=1,
+                    showgrid=True
+                ),
+                yaxis=dict(
+                    gridcolor='rgba(128, 128, 128, 0.2)',
+                    gridwidth=1,
+                    showgrid=True
+                )
             )
             
             st.plotly_chart(fig, use_container_width=True)
@@ -280,7 +330,7 @@ def main():
     
     with col_right:
         # Risk Distribution (Pie Chart)
-        st.subheader("Risk Distribution")
+        st.markdown("### 🥧 Risk Distribution")
         
         if len(filtered_df) > 0:
             risk_dist = filtered_df['risk_classification'].value_counts()
@@ -406,7 +456,7 @@ def main():
     st.markdown("---")
     
     # Detailed Table
-    st.header("Detailed Risk Scores")
+    st.markdown("### 📋 Detailed Risk Scores")
     
     if len(filtered_df) > 0:
         # Prepare display columns
