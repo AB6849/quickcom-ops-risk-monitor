@@ -25,33 +25,145 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for professional look
+# Enhanced CSS for modern, wow-inducing design
 st.markdown("""
     <style>
+    /* Main Header with Gradient */
     .main-header {
-        font-size: 2.5rem;
-        font-weight: bold;
-        color: #1f77b4;
+        font-size: 3rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
         text-align: center;
-        padding: 1rem 0;
+        padding: 1.5rem 0;
+        margin-bottom: 1rem;
+        letter-spacing: -0.02em;
     }
+    
+    /* Metric Cards with Glassmorphism */
     .metric-card {
-        background-color: #f0f2f6;
-        padding: 1rem;
-        border-radius: 0.5rem;
-        border-left: 4px solid #1f77b4;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+        backdrop-filter: blur(10px);
+        padding: 1.5rem;
+        border-radius: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        transition: transform 0.3s ease;
     }
+    
+    .metric-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    /* High Risk Styling */
     .high-risk {
-        color: #d62728;
-        font-weight: bold;
+        color: #ff1744;
+        font-weight: 700;
+        text-shadow: 0 2px 4px rgba(255, 23, 68, 0.3);
     }
+    
+    /* Medium Risk Styling */
     .medium-risk {
-        color: #ff7f0e;
-        font-weight: bold;
+        color: #ff9800;
+        font-weight: 700;
+        text-shadow: 0 2px 4px rgba(255, 152, 0, 0.3);
     }
+    
+    /* Low Risk Styling */
     .low-risk {
-        color: #2ca02c;
-        font-weight: bold;
+        color: #4caf50;
+        font-weight: 700;
+        text-shadow: 0 2px 4px rgba(76, 175, 80, 0.3);
+    }
+    
+    /* Alert Cards */
+    .alert-card {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+        border-radius: 1rem;
+        padding: 1.5rem;
+        color: white;
+        box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
+        margin: 0.5rem 0;
+        transition: all 0.3s ease;
+    }
+    
+    .alert-card:hover {
+        transform: scale(1.02);
+        box-shadow: 0 15px 40px rgba(255, 107, 107, 0.5);
+    }
+    
+    /* Section Headers */
+    h2, h3 {
+        color: #2c3e50;
+        font-weight: 700;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+    }
+    
+    /* Chart Container */
+    .chart-container {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        margin: 1rem 0;
+    }
+    
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(135deg, #764ba2, #667eea);
+    }
+    
+    /* Button Styling */
+    .stButton > button {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 0.5rem;
+        padding: 0.5rem 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    .stButton > button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+    
+    /* Metric Value Styling */
+    [data-testid="stMetricValue"] {
+        font-size: 2rem;
+        font-weight: 700;
+    }
+    
+    /* Info Boxes */
+    .stInfo {
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+        border-left: 4px solid #667eea;
+        border-radius: 0.5rem;
+    }
+    
+    /* Main Container Background */
+    .main .block-container {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
     }
     </style>
 """, unsafe_allow_html=True)
