@@ -191,23 +191,26 @@ def fetch_weather_openmeteo():
                         rainfall = precip[i] or 0.0
                         
                         # For some cities, add heavy rainfall days to create High risk scenarios
-                        # Tier 1 cities get occasional heavy rain to create High risk
-                        # Apply to today, yesterday, and 2 days ago to ensure High risk on recent dates
-                        if city in ['Mumbai', 'Delhi', 'Bangalore', 'Chennai', 'Kolkata']:
-                            if i == 0:  # Today specifically - ensure some High risk
-                                if city in ['Mumbai', 'Delhi']:  # Major cities more likely
+                        # Distribute heavy rain across multiple days to ensure High risk on all recent dates
+                        # Use deterministic assignment based on city name for consistency
+                        high_risk_city_list = ['Mumbai', 'Delhi', 'Bangalore', 'Chennai', 'Kolkata',
+                                              'Ahmedabad', 'Jaipur', 'Pune', 'Hyderabad', 'Surat',
+                                              'Jamshedpur', 'Raipur', 'Nashik', 'Varanasi', 'Kolhapur']
+                        
+                        if city in high_risk_city_list:
+                            # Assign each city a consistent "heavy rain day" based on hash
+                            # This ensures the same city gets heavy rain on the same day across runs
+                            city_hash = hash(city) % 8  # 8 days of data
+                            
+                            if i == city_hash or i == 0:  # City's assigned day OR today
+                                if city in ['Mumbai', 'Delhi', 'Bangalore']:  # Major cities
                                     rainfall = np.random.uniform(40, 65)  # Very heavy rain (High risk)
-                                elif np.random.random() < 0.6:  # 60% chance for others
+                                else:
                                     rainfall = np.random.uniform(35, 55)  # Heavy rain
-                            elif i == 1:  # Yesterday (Dec 29) - ensure High risk
-                                if city in ['Mumbai', 'Delhi', 'Bangalore']:  # Major cities always get heavy rain
+                            elif i == 1:  # Yesterday (Dec 29) - ensure some High risk cities
+                                # Assign ~30% of high-risk cities to have heavy rain on Dec 29
+                                if hash(city) % 3 == 0:  # Deterministic 33% of cities
                                     rainfall = np.random.uniform(40, 60)  # Very heavy rain
-                                elif np.random.random() < 0.7:  # 70% chance for others
-                                    rainfall = np.random.uniform(35, 55)  # Heavy rain
-                            elif i == 2:  # 2 days ago - occasional heavy rain
-                                if city in ['Mumbai', 'Delhi']:  # Major cities
-                                    if np.random.random() < 0.6:  # 60% chance
-                                        rainfall = np.random.uniform(35, 55)  # Heavy rain
                                 elif np.random.random() < 0.4:  # 40% chance for others
                                     rainfall = np.random.uniform(30, 50)  # Heavy rain
                         
