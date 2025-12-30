@@ -20,7 +20,7 @@ import time
 # Page configuration
 st.set_page_config(
     page_title="Quick-Commerce Risk Monitor",
-    page_icon="📊",
+    page_icon=None,
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -275,7 +275,7 @@ def main():
     ].copy()
     
     # Key Metrics Row with Enhanced Styling
-    st.markdown("### 📊 Key Metrics")
+    st.markdown("### Key Metrics")
     col1, col2, col3, col4, col5 = st.columns(5)
     
     total_cities = len(filtered_df)
@@ -345,7 +345,7 @@ def main():
     
     # Display alerts for selected date with Enhanced Design
     if len(date_alerts) > 0:
-        st.markdown("### 🚨 High-Risk Alerts")
+        st.markdown("### High-Risk Alerts")
         
         # Sort by risk score (highest first)
         date_alerts = date_alerts.sort_values('risk_score', ascending=False)
@@ -385,7 +385,7 @@ def main():
     
     with col_left:
         # Risk Score by City (Bar Chart) - Top 20
-        st.markdown("### 📈 Top 20 Cities by Risk Score")
+        st.markdown("### Top 20 Cities by Risk Score")
         
         if len(filtered_df) > 0:
             # Sort by risk score (highest first) and take top 20
@@ -449,7 +449,7 @@ def main():
     
     with col_right:
         # Risk Distribution (Pie Chart)
-        st.markdown("### 🥧 Risk Distribution")
+        st.markdown("### Risk Distribution")
         
         if len(filtered_df) > 0:
             risk_dist = filtered_df['risk_classification'].value_counts()
@@ -495,13 +495,13 @@ def main():
     st.markdown("---")
     
     # Risk Components Analysis
-    st.markdown("### 🔍 Risk Components Analysis")
+    st.markdown("### Risk Components Analysis")
     
     col1, col2 = st.columns(2)
     
     with col1:
         # Component Comparison
-        st.markdown("### 📊 Average Risk by Component")
+        st.markdown("### Average Risk by Component")
         
         if len(filtered_df) > 0:
             components = ['traffic_risk', 'weather_risk', 'demand_risk']
@@ -529,7 +529,7 @@ def main():
     
     with col2:
         # Risk Trend Over Time
-        st.markdown("### 📉 Risk Trend (Last 7 Days)")
+        st.markdown("### Risk Trend (Last 7 Days)")
         
         # Get last 7 days of data
         trend_start = selected_date - timedelta(days=7)
@@ -592,7 +592,7 @@ def main():
     st.markdown("---")
     
     # Detailed Table
-    st.markdown("### 📋 Detailed Risk Scores")
+    st.markdown("### Detailed Risk Scores")
     
     if len(filtered_df) > 0:
         # Prepare display columns
