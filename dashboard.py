@@ -20,7 +20,7 @@ import time
 # Page configuration
 st.set_page_config(
     page_title="Quick-Commerce Risk Monitor",
-    page_icon=None,
+    page_icon="📊",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -98,8 +98,15 @@ def load_risk_data():
 
 # Main dashboard
 def main():
-    # Header
-    st.markdown('<h1 class="main-header">India Quick-Commerce Operational Risk Monitor</h1>', unsafe_allow_html=True)
+    # Header with enhanced design
+    st.markdown("""
+        <div style="text-align: center; padding: 2rem 0;">
+            <h1 class="main-header">India Quick-Commerce Operational Risk Monitor</h1>
+            <p style="color: #7f8c8d; font-size: 1.2rem; margin-top: -1rem;">
+                Real-time operational risk monitoring across 162+ Indian cities
+            </p>
+        </div>
+    """, unsafe_allow_html=True)
     st.markdown("---")
     
     # Load data
@@ -349,7 +356,24 @@ def main():
             fig.update_traces(
                 textposition='inside',
                 textinfo='percent+label',
-                hovertemplate='<b>%{label}</b><br>Count: %{value}<br>Percentage: %{percent}<extra></extra>'
+                hovertemplate='<b>%{label}</b><br>Count: %{value}<br>Percentage: %{percent}<extra></extra>',
+                marker=dict(line=dict(color='#FFFFFF', width=2))
+            )
+            
+            fig.update_layout(
+                showlegend=True,
+                legend=dict(
+                    orientation="v",
+                    yanchor="middle",
+                    y=0.5,
+                    xanchor="left",
+                    x=1.05,
+                    font=dict(size=12)
+                ),
+                height=400,
+                plot_bgcolor='rgba(0,0,0,0)',
+                paper_bgcolor='rgba(0,0,0,0)',
+                font=dict(family="Arial, sans-serif", size=12)
             )
             
             st.plotly_chart(fig, use_container_width=True)
@@ -359,7 +383,7 @@ def main():
     st.markdown("---")
     
     # Risk Components Analysis
-    st.header("Risk Components Analysis")
+    st.markdown("### 🔍 Risk Components Analysis")
     
     col1, col2 = st.columns(2)
     
