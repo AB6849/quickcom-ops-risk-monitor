@@ -5,12 +5,11 @@ Defines city tiers, SLA thresholds, and risk weights for operational risk scorin
 """
 
 # Indian city tiers based on population and quick-commerce market size
+# Expanded to ~150 cities for comprehensive coverage and diverse risk distribution
 CITY_TIERS = {
     'Tier 1': ['Mumbai', 'Delhi', 'Bangalore', 'Hyderabad', 'Chennai', 'Kolkata', 'Pune'],
-    'Tier 2': ['Ahmedabad', 'Jaipur', 'Surat', 'Lucknow', 'Kanpur', 'Nagpur', 'Indore', 
-               'Thane', 'Bhopal', 'Visakhapatnam', 'Patna', 'Vadodara'],
-    'Tier 3': ['Ghaziabad', 'Ludhiana', 'Agra', 'Nashik', 'Faridabad', 'Meerut', 'Rajkot',
-               'Varanasi', 'Srinagar', 'Amritsar', 'Navi Mumbai', 'Allahabad']
+    'Tier 2': ['Ahmedabad', 'Jaipur', 'Surat', 'Lucknow', 'Kanpur', 'Nagpur', 'Indore', 'Thane', 'Bhopal', 'Visakhapatnam', 'Patna', 'Vadodara', 'Coimbatore', 'Chandigarh', 'Madurai', 'Jamshedpur', 'Raipur', 'Allahabad', 'Amritsar', 'Varanasi', 'Agra', 'Nashik', 'Faridabad', 'Meerut', 'Rajkot', 'Srinagar', 'Ludhiana', 'Ghaziabad', 'Navi Mumbai', 'Vijayawada'],
+    'Tier 3': ['Gwalior', 'Jabalpur', 'Bhubaneswar', 'Mysore', 'Tiruchirappalli', 'Salem', 'Warangal', 'Kochi', 'Thiruvananthapuram', 'Dehradun', 'Guwahati', 'Jalandhar', 'Bareilly', 'Aligarh', 'Gorakhpur', 'Bokaro Steel City', 'Asansol', 'Dhanbad', 'Hubli', 'Mangalore', 'Belgaum', 'Tirunelveli', 'Udaipur', 'Tiruppur', 'Kozhikode', 'Akola', 'Kurnool', 'Bellary', 'Patiala', 'Bhagalpur', 'Muzaffarnagar', 'Latur', 'Dhule', 'Rohtak', 'Korba', 'Bhilwara', 'Muzaffarpur', 'Ahmednagar', 'Mathura', 'Kollam', 'Avadi', 'Kadapa', 'Sambalpur', 'Bilaspur', 'Shahjahanpur', 'Satara', 'Bijapur', 'Rampur', 'Shivamogga', 'Chandrapur', 'Junagadh', 'Thrissur', 'Alwar', 'Bardhaman', 'Nizamabad', 'Parbhani', 'Tumkur', 'Khammam', 'Panipat', 'Darbhanga', 'Dewas', 'Ichalkaranji', 'Karnal', 'Bathinda', 'Jalna', 'Eluru', 'Barasat', 'Purnia', 'Satna', 'Mau', 'Sonipat', 'Farrukhabad', 'Sagar', 'Rourkela', 'Durg', 'Imphal', 'Ratlam', 'Hapur', 'Anantapur', 'Arrah', 'Karimnagar', 'Etawah', 'Bharatpur', 'Begusarai', 'Noida', 'Gurgaon', 'Greater Noida', 'Gandhinagar', 'Kalyan', 'Vasai', 'Aurangabad', 'Solapur', 'Kolhapur', 'Sangli', 'Malegaon', 'Jalgaon', 'Bhusawal', 'Amravati', 'Nanded', 'Osmanabad', 'Bidar', 'Gulbarga', 'Raichur', 'Hospet', 'Davangere', 'Hassan', 'Mandya', 'Chitradurga', 'Tumakuru', 'Kolar', 'Chikkaballapur', 'Ramanagara', 'Hosur', 'Krishnagiri', 'Dharmapuri', 'Erode', 'Namakkal', 'Karur', 'Dindigul', 'Theni', 'Virudhunagar', 'Sivakasi', 'Thoothukudi', 'Nagercoil', 'Kanyakumari']
 }
 
 # SLA thresholds (in minutes) for delivery time by city tier
