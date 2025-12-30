@@ -228,12 +228,14 @@ def main():
     col_left, col_right = st.columns(2)
     
     with col_left:
-        # Risk Score by City (Bar Chart)
-        st.subheader("Risk Scores by City")
+        # Risk Score by City (Bar Chart) - Top 20
+        st.subheader("Top 20 Cities by Risk Score")
         
         if len(filtered_df) > 0:
-            # Sort by risk score
-            chart_df = filtered_df.sort_values('risk_score', ascending=True)
+            # Sort by risk score (highest first) and take top 20
+            chart_df = filtered_df.sort_values('risk_score', ascending=False).head(20)
+            # Reverse for display (highest at top in horizontal bar)
+            chart_df = chart_df.sort_values('risk_score', ascending=True)
             
             # Create color mapping
             colors = []
@@ -253,23 +255,26 @@ def main():
                     marker=dict(color=colors),
                     text=[f"{score:.1f}" for score in chart_df['risk_score']],
                     textposition='outside',
-                    hovertemplate='<b>%{y}</b><br>Risk Score: %{x:.1f}<extra></extra>'
+                    hovertemplate='<b>%{y}</b><br>Risk Score: %{x:.1f}<br>Classification: %{customdata}<extra></extra>',
+                    customdata=chart_df['risk_classification']
                 )
             ])
             
-            # Dynamic height based on number of cities (min 400, max 2000)
-            num_cities = len(chart_df)
-            chart_height = max(400, min(2000, num_cities * 25))
-            
+            # Fixed height for top 20 (20 cities * 30px = 600px)
             fig.update_layout(
                 xaxis_title="Risk Score",
                 yaxis_title="City",
-                height=chart_height,
+                height=600,
                 showlegend=False,
-                xaxis_range=[0, 100]
+                xaxis_range=[0, 100],
+                margin=dict(l=150, r=50, t=20, b=50)
             )
             
             st.plotly_chart(fig, use_container_width=True)
+            
+            # Show note about total cities
+            if len(filtered_df) > 20:
+                st.caption(f"Showing top 20 of {len(filtered_df)} cities. See full list in 'Detailed Risk Scores' table below.")
         else:
             st.info("No data available for selected filters.")
     
