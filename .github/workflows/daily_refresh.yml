@@ -24,13 +24,14 @@ jobs:
     
     - name: Run pipeline
       run: |
-        python run_pipeline.py
+        python3 run_pipeline.py
     
     - name: Commit and push data
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add data/raw/*.csv outputs/*.csv
-        git diff --staged --quiet || git commit -m "Auto-refresh: Update data $(date +'%Y-%m-%d')"
-        git push
+        git add data/raw/*.csv data/processed/*.csv outputs/*.csv
+        git diff --staged --quiet || (git commit -m "Auto-refresh: Update data $(date +'%Y-%m-%d %H:%M:%S UTC)") && git push
 
