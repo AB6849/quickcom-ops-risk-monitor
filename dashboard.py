@@ -257,10 +257,14 @@ def main():
                 )
             ])
             
+            # Dynamic height based on number of cities (min 400, max 2000)
+            num_cities = len(chart_df)
+            chart_height = max(400, min(2000, num_cities * 25))
+            
             fig.update_layout(
                 xaxis_title="Risk Score",
                 yaxis_title="City",
-                height=400,
+                height=chart_height,
                 showlegend=False,
                 xaxis_range=[0, 100]
             )
