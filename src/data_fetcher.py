@@ -199,11 +199,16 @@ def fetch_weather_openmeteo():
                                     rainfall = np.random.uniform(40, 65)  # Very heavy rain (High risk)
                                 elif np.random.random() < 0.6:  # 60% chance for others
                                     rainfall = np.random.uniform(35, 55)  # Heavy rain
-                            elif i <= 2:  # Yesterday and 2 days ago - ensure High risk on recent dates
+                            elif i == 1:  # Yesterday (Dec 29) - ensure High risk
+                                if city in ['Mumbai', 'Delhi', 'Bangalore']:  # Major cities always get heavy rain
+                                    rainfall = np.random.uniform(40, 60)  # Very heavy rain
+                                elif np.random.random() < 0.7:  # 70% chance for others
+                                    rainfall = np.random.uniform(35, 55)  # Heavy rain
+                            elif i == 2:  # 2 days ago - occasional heavy rain
                                 if city in ['Mumbai', 'Delhi']:  # Major cities
-                                    if np.random.random() < 0.7:  # 70% chance
-                                        rainfall = np.random.uniform(35, 60)  # Heavy rain
-                                elif np.random.random() < 0.5:  # 50% chance for others
+                                    if np.random.random() < 0.6:  # 60% chance
+                                        rainfall = np.random.uniform(35, 55)  # Heavy rain
+                                elif np.random.random() < 0.4:  # 40% chance for others
                                     rainfall = np.random.uniform(30, 50)  # Heavy rain
                         
                         weather_data.append({
