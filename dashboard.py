@@ -11,7 +11,6 @@ Last updated: 2025-12-30
 
 import streamlit as st
 import pandas as pd
-import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 from pathlib import Path
@@ -335,15 +334,18 @@ def main():
             # Use alerts from file (has alert_reason)
             date_alerts = alerts_for_date.copy()
         else:
-            # Generate alert reasons from filtered data
+            # Generate alert reasons from filtered data using raw feature values
             if len(date_alerts) > 0:
-                date_alerts['alert_reason'] = date_alerts.apply(
-                    lambda row: f"High traffic congestion ({row.get('traffic_risk', 0):.2f}); "
-                               f"Heavy rainfall ({row.get('weather_risk', 0):.1f}mm); "
-                               f"Demand surge ({row.get('demand_risk', 0):.2f})" 
-                               if 'traffic_risk' in row else "Multiple risk factors",
-                    axis=1
-                )
+                def _build_reason(row):
+                    parts = []
+                    if row.get('traffic_risk', 0) >= 60:
+                        parts.append(f"High congestion ({row.get('congestion_level', 0):.2f})")
+                    if row.get('weather_risk', 0) >= 60:
+                        parts.append(f"Heavy rainfall ({row.get('rainfall_mm', 0):.1f}mm)")
+                    if row.get('demand_risk', 0) >= 60:
+                        parts.append(f"Demand surge ({row.get('demand_index', 0):.2f})")
+                    return "; ".join(parts) if parts else "Multiple risk factors combined"
+                date_alerts['alert_reason'] = date_alerts.apply(_build_reason, axis=1)
     
     # Display alerts for selected date with Enhanced Design
     if len(date_alerts) > 0:
@@ -634,8 +636,103 @@ def main():
         st.info("No data available for selected filters.")
     
     st.markdown("---")
-    
-    # Data Freshness Indicator
+
+    # ── Anomaly Detection Results ────────────────────────────────────────────
+    st.markdown("### ML Anomaly Detection")
+    st.caption(
+        "Cities flagged by IsolationForest as having an unusual combination "
+        "of traffic, weather, and demand — even if no single factor breaches a threshold."
+    )
+
+    if 'is_anomaly' in filtered_df.columns:
+        anomalies = filtered_df[filtered_df['is_anomaly']].sort_values('anomaly_score', ascending=False)
+        if len(anomalies) > 0:
+            display_anomaly_cols = [c for c in
+                ['city', 'city_tier', 'anomaly_score', 'risk_score', 'risk_classification',
+                 'traffic_risk', 'weather_risk', 'demand_risk']
+                if c in anomalies.columns]
+            anomaly_display = anomalies[display_anomaly_cols].copy()
+            for col in ['anomaly_score', 'risk_score', 'traffic_risk', 'weather_risk', 'demand_risk']:
+                if col in anomaly_display.columns:
+                    anomaly_display[col] = anomaly_display[col].round(1)
+            st.dataframe(anomaly_display, use_container_width=True)
+            st.caption(f"{len(anomalies)} anomalous cities detected today (IsolationForest, contamination=5%)")
+        else:
+            st.success("No anomalous cities detected for the selected date/filters.")
+    else:
+        st.info("Anomaly scores not available — re-run the pipeline to generate them.")
+
+    st.markdown("---")
+
+    # ── Next-Day Risk Forecast ────────────────────────────────────────────────
+    st.markdown("### Next-Day Risk Forecast")
+    st.caption("Predicted risk scores for tomorrow using Exponentially Weighted Moving Average (EWMA, alpha=0.4).")
+
+    forecast_file = Path('outputs/forecast_tomorrow.csv')
+    if forecast_file.exists():
+        forecast_df = pd.read_csv(forecast_file, parse_dates=['forecast_date'])
+
+        # Filter to selected cities if any are chosen
+        if selected_cities and len(selected_cities) < len(risk_df['city'].unique()):
+            forecast_df = forecast_df[forecast_df['city'].isin(selected_cities)]
+
+        col_f1, col_f2 = st.columns(2)
+
+        with col_f1:
+            # Top 15 forecast bar chart
+            top_forecast = forecast_df.head(15).sort_values('forecast_risk', ascending=True)
+            forecast_colors = []
+            for cls in top_forecast['forecast_classification']:
+                if cls == 'High':
+                    forecast_colors.append('#d62728')
+                elif cls == 'Medium':
+                    forecast_colors.append('#ff7f0e')
+                else:
+                    forecast_colors.append('#2ca02c')
+
+            fig_f = go.Figure(data=[go.Bar(
+                y=top_forecast['city'],
+                x=top_forecast['forecast_risk'],
+                orientation='h',
+                marker=dict(color=forecast_colors),
+                text=[f"{s:.1f}" for s in top_forecast['forecast_risk']],
+                textposition='outside',
+                hovertemplate='<b>%{y}</b><br>Forecast: %{x:.1f}<extra></extra>',
+            )])
+            fig_f.update_layout(
+                xaxis_title="Forecast Risk Score",
+                height=450,
+                showlegend=False,
+                xaxis_range=[0, 100],
+                margin=dict(l=150, r=50, t=20, b=50),
+                plot_bgcolor='rgba(0,0,0,0)',
+                paper_bgcolor='rgba(0,0,0,0)',
+            )
+            st.markdown("**Top 15 Cities — Tomorrow's Forecast**")
+            st.plotly_chart(fig_f, use_container_width=True)
+
+        with col_f2:
+            # Trend table: worsening cities
+            trend_cols = [c for c in ['city', 'forecast_risk', 'forecast_classification', 'trend']
+                          if c in forecast_df.columns]
+            trend_display = forecast_df[trend_cols].copy()
+            if 'trend' in trend_display.columns:
+                trend_display = trend_display.sort_values('trend', ascending=False)
+                trend_display['trend'] = trend_display['trend'].apply(
+                    lambda t: f"+{t:.1f} (worsening)" if t > 1 else (f"{t:.1f} (improving)" if t < -1 else f"{t:.1f} (stable)")
+                )
+            st.markdown("**Full Forecast Table**")
+            st.dataframe(trend_display, use_container_width=True, height=450)
+
+        next_date = forecast_df['forecast_date'].iloc[0].strftime('%Y-%m-%d') if len(forecast_df) else 'N/A'
+        high_count = (forecast_df['forecast_classification'] == 'High').sum()
+        st.caption(f"Forecast date: {next_date}  |  Cities predicted High risk: {high_count}")
+    else:
+        st.info("Forecast not available — re-run the pipeline to generate `outputs/forecast_tomorrow.csv`.")
+
+    st.markdown("---")
+
+    # ── Data Freshness Indicator ──────────────────────────────────────────────
     st.markdown("---")
     st.header("Data Freshness")
     
