@@ -33,142 +33,120 @@ st.set_page_config(
 # Enhanced CSS for modern, wow-inducing design
 st.markdown("""
     <style>
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    
+    /* Main App Background & Typography */
+    html, body, [class*="css"], .stApp {
+        font-family: 'Plus Jakarta Sans', 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif !important;
+        background-color: #080B11 !important;
+        color: #E2E8F0 !important;
+    }
+    
+    .stApp {
+        background: radial-gradient(circle at 50% 0%, #171b2d 0%, #090d16 65%, #04060b 100%) !important;
+    }
+    
+    /* Sidebar styling with glassmorphism */
+    [data-testid="stSidebar"] {
+        background-color: rgba(13, 17, 28, 0.75) !important;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-right: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] h2 {
+        color: #FFFFFF !important;
+        font-size: 1.25rem !important;
+        font-weight: 700 !important;
+        margin-top: 1rem !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        padding-bottom: 0.5rem;
+    }
+    
     /* Main Header with Gradient */
     .main-header {
-        font-size: 3rem;
+        font-size: 2.75rem;
         font-weight: 800;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #C084FC 0%, #6366F1 50%, #38BDF8 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
         text-align: center;
-        padding: 1.5rem 0;
-        margin-bottom: 1rem;
-        letter-spacing: -0.02em;
-    }
-    
-    /* Metric Cards with Glassmorphism */
-    .metric-card {
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-        backdrop-filter: blur(10px);
-        padding: 1.5rem;
-        border-radius: 1rem;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-        transition: transform 0.3s ease;
-    }
-    
-    .metric-card:hover {
-        transform: translateY(-5px);
-    }
-    
-    /* High Risk Styling */
-    .high-risk {
-        color: #ff1744;
-        font-weight: 700;
-        text-shadow: 0 2px 4px rgba(255, 23, 68, 0.3);
-    }
-    
-    /* Medium Risk Styling */
-    .medium-risk {
-        color: #ff9800;
-        font-weight: 700;
-        text-shadow: 0 2px 4px rgba(255, 152, 0, 0.3);
-    }
-    
-    /* Low Risk Styling */
-    .low-risk {
-        color: #4caf50;
-        font-weight: 700;
-        text-shadow: 0 2px 4px rgba(76, 175, 80, 0.3);
-    }
-    
-    /* Alert Cards */
-    .alert-card {
-        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
-        border-radius: 1rem;
-        padding: 1.5rem;
-        color: white;
-        box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
-        margin: 0.5rem 0;
-        transition: all 0.3s ease;
-    }
-    
-    .alert-card:hover {
-        transform: scale(1.02);
-        box-shadow: 0 15px 40px rgba(255, 107, 107, 0.5);
+        padding: 1.5rem 0 0.5rem 0;
+        letter-spacing: -0.03em;
     }
     
     /* Section Headers */
-    h2, h3 {
-        color: #2c3e50;
-        font-weight: 700;
-        margin-top: 2rem;
-        margin-bottom: 1rem;
-    }
-    
-    /* Chart Container */
-    .chart-container {
-        background: white;
-        border-radius: 1rem;
-        padding: 1.5rem;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        margin: 1rem 0;
+    h2, h3, [data-testid="stMarkdownContainer"] h3 {
+        color: #FFFFFF !important;
+        font-weight: 700 !important;
+        letter-spacing: -0.02em;
     }
     
     /* Custom Scrollbar */
     ::-webkit-scrollbar {
-        width: 10px;
+        width: 8px;
+        height: 8px;
     }
     
     ::-webkit-scrollbar-track {
-        background: #f1f1f1;
-        border-radius: 10px;
+        background: #090d16;
     }
     
     ::-webkit-scrollbar-thumb {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        border-radius: 10px;
+        background: rgba(99, 102, 241, 0.3);
+        border-radius: 4px;
     }
     
     ::-webkit-scrollbar-thumb:hover {
-        background: linear-gradient(135deg, #764ba2, #667eea);
+        background: rgba(99, 102, 241, 0.6);
     }
     
-    /* Button Styling */
+    /* Premium Button */
     .stButton > button {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        border: none;
-        border-radius: 0.5rem;
-        padding: 0.5rem 2rem;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%) !important;
+        color: #FFFFFF !important;
+        border: none !important;
+        border-radius: 0.5rem !important;
+        padding: 0.6rem 2rem !important;
+        font-weight: 600 !important;
+        transition: all 0.2s ease !important;
+        box-shadow: 0 4px 14px 0 rgba(99, 102, 241, 0.3) !important;
     }
     
     .stButton > button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        transform: translateY(-1px) !important;
+        box-shadow: 0 6px 20px 0 rgba(99, 102, 241, 0.5) !important;
+        background: linear-gradient(135deg, #4F46E5 0%, #4338CA 100%) !important;
     }
     
-    /* Metric Value Styling */
-    [data-testid="stMetricValue"] {
-        font-size: 2rem;
-        font-weight: 700;
+    /* Streamlit widgets tweaks */
+    div[data-baseweb="select"] > div {
+        background-color: rgba(17, 24, 39, 0.6) !important;
+        border-color: rgba(255, 255, 255, 0.08) !important;
+        color: #FFFFFF !important;
     }
     
-    /* Info Boxes */
-    .stInfo {
-        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
-        border-left: 4px solid #667eea;
-        border-radius: 0.5rem;
+    div[role="listbox"] {
+        background-color: #0d111c !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
     }
     
-    /* Main Container Background */
-    .main .block-container {
-        padding-top: 2rem;
-        padding-bottom: 2rem;
+    /* Info Box Overrides */
+    .stInfo, div[data-testid="stNotification"] {
+        background: rgba(99, 102, 241, 0.08) !important;
+        border: 1px solid rgba(99, 102, 241, 0.2) !important;
+        border-left: 4px solid #6366F1 !important;
+        color: #E2E8F0 !important;
+        border-radius: 0.5rem !important;
+    }
+    
+    /* DataFrame Styling */
+    div[data-testid="stDataFrame"] {
+        background: rgba(17, 24, 39, 0.4) !important;
+        border: 1px solid rgba(255, 255, 255, 0.06) !important;
+        border-radius: 0.75rem !important;
+        padding: 0.5rem !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -229,6 +207,36 @@ def main():
     # Load data
     risk_df, alerts_df = load_risk_data()
     
+    # Helper to style Plotly charts with a premium SaaS theme
+    def apply_premium_plotly_layout(fig, height=350):
+        fig.update_layout(
+            plot_bgcolor='rgba(0,0,0,0)',
+            paper_bgcolor='rgba(0,0,0,0)',
+            font=dict(family="'Plus Jakarta Sans', 'Outfit', sans-serif", size=12, color='#94A3B8'),
+            margin=dict(l=50, r=20, t=30, b=45),
+            height=height,
+            xaxis=dict(
+                gridcolor='rgba(255, 255, 255, 0.05)',
+                linecolor='rgba(255, 255, 255, 0.06)',
+                zeroline=False,
+                title_font=dict(size=11, color='#64748B'),
+                tickfont=dict(color='#94A3B8')
+            ),
+            yaxis=dict(
+                gridcolor='rgba(255, 255, 255, 0.05)',
+                linecolor='rgba(255, 255, 255, 0.06)',
+                zeroline=False,
+                title_font=dict(size=11, color='#64748B'),
+                tickfont=dict(color='#94A3B8')
+            ),
+            legend=dict(
+                bgcolor='rgba(15, 23, 42, 0.6)',
+                bordercolor='rgba(255, 255, 255, 0.05)',
+                borderwidth=1,
+                font=dict(size=10, color='#94A3B8')
+            )
+        )
+    
     if risk_df is None:
         st.error("Output files not found! Please run the pipeline first:")
         st.code("python run_pipeline.py", language="bash")
@@ -287,43 +295,61 @@ def main():
     high_risk = len(filtered_df[filtered_df['risk_classification'] == 'High'])
     medium_risk = len(filtered_df[filtered_df['risk_classification'] == 'Medium'])
     low_risk = len(filtered_df[filtered_df['risk_classification'] == 'Low'])
-    avg_risk_score = filtered_df['risk_score'].mean()
+    avg_risk_score = filtered_df['risk_score'].mean() if len(filtered_df) > 0 else 0.0
     
+    def render_custom_metric(title, value, risk_class=None, suffix=""):
+        accent_color = "#3B82F6"
+        glow_shadow = "rgba(59, 130, 246, 0.15)"
+        if risk_class == "High":
+            accent_color = "#EF4444"
+            glow_shadow = "rgba(239, 68, 68, 0.2)"
+        elif risk_class == "Medium":
+            accent_color = "#F59E0B"
+            glow_shadow = "rgba(245, 158, 11, 0.2)"
+        elif risk_class == "Low":
+            accent_color = "#10B981"
+            glow_shadow = "rgba(16, 185, 129, 0.2)"
+        elif title == "Avg Risk Score":
+            val_num = float(value)
+            if val_num > 60:
+                accent_color = "#EF4444"
+                glow_shadow = "rgba(239, 68, 68, 0.2)"
+            elif val_num > 30:
+                accent_color = "#F59E0B"
+                glow_shadow = "rgba(245, 158, 11, 0.2)"
+            else:
+                accent_color = "#10B981"
+                glow_shadow = "rgba(16, 185, 129, 0.2)"
+
+        st.markdown(f"""
+            <div style="
+                background: rgba(17, 24, 39, 0.5);
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+                border: 1px solid rgba(255, 255, 255, 0.05);
+                border-top: 3px solid {accent_color};
+                border-radius: 0.75rem;
+                padding: 1.25rem;
+                box-shadow: 0 4px 20px {glow_shadow};
+                text-align: center;
+                transition: all 0.3s ease;
+                margin-bottom: 1rem;
+            " class="metric-box">
+                <div style="color: #94A3B8; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">{title}</div>
+                <div style="font-size: 2.25rem; font-weight: 800; color: #FFFFFF; text-shadow: 0 0 10px {glow_shadow};">{value}{suffix}</div>
+            </div>
+        """, unsafe_allow_html=True)
+
     with col1:
-        st.metric(
-            "Total Cities", 
-            total_cities,
-            help="Total number of cities being monitored"
-        )
+        render_custom_metric("Total Cities", total_cities)
     with col2:
-        st.metric(
-            "High Risk", 
-            high_risk, 
-            delta=None,
-            delta_color="inverse",
-            help="Cities requiring immediate attention"
-        )
+        render_custom_metric("High Risk", high_risk, "High")
     with col3:
-        st.metric(
-            "Medium Risk", 
-            medium_risk, 
-            delta=None,
-            help="Cities needing monitoring"
-        )
+        render_custom_metric("Medium Risk", medium_risk, "Medium")
     with col4:
-        st.metric(
-            "Low Risk", 
-            low_risk, 
-            delta=None,
-            help="Cities operating normally"
-        )
+        render_custom_metric("Low Risk", low_risk, "Low")
     with col5:
-        st.metric(
-            "Avg Risk Score", 
-            f"{avg_risk_score:.1f}", 
-            delta=None,
-            help="Average risk score across all cities"
-        )
+        render_custom_metric("Avg Risk Score", f"{avg_risk_score:.1f}")
     
     st.markdown("---")
     
@@ -378,16 +404,30 @@ def main():
                         # Custom alert card with gradient
                         st.markdown(f"""
                             <div style="
-                                background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
-                                border-radius: 1rem;
-                                padding: 1.5rem;
-                                color: white;
-                                box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
+                                background: rgba(239, 68, 68, 0.08);
+                                backdrop-filter: blur(12px);
+                                -webkit-backdrop-filter: blur(12px);
+                                border: 1px solid rgba(239, 68, 68, 0.25);
+                                border-left: 5px solid #F43F5E;
+                                border-radius: 0.75rem;
+                                padding: 1.25rem;
+                                box-shadow: 0 8px 24px -10px rgba(239, 68, 68, 0.3);
                                 margin-bottom: 1rem;
-                            ">
-                                <h3 style="color: white; margin: 0 0 0.5rem 0; font-size: 1.5rem;">{alert['city']}</h3>
-                                <p style="color: white; font-size: 2rem; font-weight: 700; margin: 0.5rem 0;">{alert['risk_score']:.1f}</p>
-                                <p style="color: rgba(255, 255, 255, 0.9); font-size: 0.9rem; margin: 0.5rem 0 0 0;">{alert.get('alert_reason', 'Multiple risk factors')}</p>
+                            " class="alert-box">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                                    <h3 style="color: #FFFFFF; margin: 0; font-size: 1.3rem; font-weight: 700;">{alert['city']}</h3>
+                                    <span style="background: #F43F5E; color: #FFFFFF; font-size: 0.75rem; font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 0.25rem; letter-spacing: 0.05em;">CRITICAL</span>
+                                </div>
+                                <div style="display: flex; align-items: baseline; margin-bottom: 0.75rem;">
+                                    <span style="color: #F43F5E; font-size: 2rem; font-weight: 800; line-height: 1;">{alert['risk_score']:.1f}</span>
+                                    <span style="color: #94A3B8; font-size: 0.8rem; margin-left: 0.5rem;">/ 100 Risk Score</span>
+                                </div>
+                                <div style="display: flex; align-items: flex-start; gap: 0.5rem; color: #E2E8F0; font-size: 0.85rem; background: rgba(0,0,0,0.2); padding: 0.6rem; border-radius: 0.5rem;">
+                                    <svg style="flex-shrink: 0; width: 14px; height: 14px; margin-top: 2px; fill: #F43F5E;" viewBox="0 0 24 24">
+                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                                    </svg>
+                                    <span>{alert.get('alert_reason', 'Multiple risk factors')}</span>
+                                </div>
                             </div>
                         """, unsafe_allow_html=True)
         
@@ -410,46 +450,33 @@ def main():
             colors = []
             for risk in chart_df['risk_classification']:
                 if risk == 'High':
-                    colors.append('#d62728')
+                    colors.append('#F43F5E')
                 elif risk == 'Medium':
-                    colors.append('#ff7f0e')
+                    colors.append('#F59E0B')
                 else:
-                    colors.append('#2ca02c')
+                    colors.append('#10B981')
             
             fig = go.Figure(data=[
                 go.Bar(
                     y=chart_df['city'],
                     x=chart_df['risk_score'],
                     orientation='h',
-                    marker=dict(color=colors),
-                    text=[f"{score:.1f}" for score in chart_df['risk_score']],
+                    marker=dict(color=colors, line=dict(color='rgba(0,0,0,0)', width=0)),
+                    text=[f" {score:.1f}" for score in chart_df['risk_score']],
                     textposition='outside',
                     hovertemplate='<b>%{y}</b><br>Risk Score: %{x:.1f}<br>Classification: %{customdata}<extra></extra>',
                     customdata=chart_df['risk_classification']
                 )
             ])
             
-            # Fixed height for top 20 (20 cities * 30px = 600px)
+            # Apply layout helper and customize
+            apply_premium_plotly_layout(fig, height=600)
             fig.update_layout(
                 xaxis_title="Risk Score",
                 yaxis_title="City",
-                height=600,
                 showlegend=False,
-                xaxis_range=[0, 100],
-                margin=dict(l=150, r=50, t=20, b=50),
-                plot_bgcolor='rgba(0,0,0,0)',
-                paper_bgcolor='rgba(0,0,0,0)',
-                font=dict(family="Arial, sans-serif", size=12),
-                xaxis=dict(
-                    gridcolor='rgba(128, 128, 128, 0.2)',
-                    gridwidth=1,
-                    showgrid=True
-                ),
-                yaxis=dict(
-                    gridcolor='rgba(128, 128, 128, 0.2)',
-                    gridwidth=1,
-                    showgrid=True
-                )
+                xaxis_range=[0, 107], # Extra padding for text labels
+                margin=dict(l=110, r=20, t=10, b=40),
             )
             
             st.plotly_chart(fig, use_container_width=True)
@@ -472,33 +499,31 @@ def main():
                 names=risk_dist.index,
                 color=risk_dist.index,
                 color_discrete_map={
-                    'High': '#d62728',
-                    'Medium': '#ff7f0e',
-                    'Low': '#2ca02c'
-                }
+                    'High': '#F43F5E',
+                    'Medium': '#F59E0B',
+                    'Low': '#10B981'
+                },
+                hole=0.6
             )
             
             fig.update_traces(
-                textposition='inside',
+                textposition='outside',
                 textinfo='percent+label',
                 hovertemplate='<b>%{label}</b><br>Count: %{value}<br>Percentage: %{percent}<extra></extra>',
-                marker=dict(line=dict(color='#FFFFFF', width=2))
+                marker=dict(line=dict(color='rgba(255,255,255,0.08)', width=1.5))
             )
             
+            apply_premium_plotly_layout(fig, height=400)
             fig.update_layout(
                 showlegend=True,
                 legend=dict(
-                    orientation="v",
-                    yanchor="middle",
-                    y=0.5,
-                    xanchor="left",
-                    x=1.05,
-                    font=dict(size=12)
+                    orientation="h",
+                    yanchor="bottom",
+                    y=-0.2,
+                    xanchor="center",
+                    x=0.5,
                 ),
-                height=400,
-                plot_bgcolor='rgba(0,0,0,0)',
-                paper_bgcolor='rgba(0,0,0,0)',
-                font=dict(family="Arial, sans-serif", size=12)
+                margin=dict(l=20, r=20, t=10, b=80),
             )
             
             st.plotly_chart(fig, use_container_width=True)
@@ -525,17 +550,17 @@ def main():
                 go.Bar(
                     x=component_names,
                     y=avg_risks,
-                    marker_color=['#1f77b4', '#ff7f0e', '#2ca02c'],
+                    marker_color=['#6366F1', '#3B82F6', '#06B6D4'],
                     text=[f"{val:.1f}" for val in avg_risks],
                     textposition='outside'
                 )
             ])
             
+            apply_premium_plotly_layout(fig, height=300)
             fig.update_layout(
                 yaxis_title="Average Risk Score",
-                height=300,
                 showlegend=False,
-                yaxis_range=[0, 100]
+                yaxis_range=[0, 107]
             )
             
             st.plotly_chart(fig, use_container_width=True)
@@ -582,18 +607,19 @@ def main():
                 y='count',
                 color='risk_classification',
                 color_discrete_map={
-                    'High': '#d62728',
-                    'Medium': '#ff7f0e',
-                    'Low': '#2ca02c'
+                    'High': '#F43F5E',
+                    'Medium': '#F59E0B',
+                    'Low': '#10B981'
                 },
                 markers=True,
-                line_shape='linear'
+                line_shape='spline'
             )
             
+            fig.update_traces(line=dict(width=3))
+            apply_premium_plotly_layout(fig, height=300)
             fig.update_layout(
                 xaxis_title="Date",
                 yaxis_title="Number of Cities",
-                height=300,
                 legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
                 xaxis=dict(tickangle=-45)
             )
@@ -624,11 +650,11 @@ def main():
         # Style the dataframe
         def highlight_risk(row):
             if row['risk_classification'] == 'High':
-                return ['background-color: #ffcccc'] * len(row)
+                return ['background-color: rgba(244, 63, 94, 0.12); color: #FFA3B1'] * len(row)
             elif row['risk_classification'] == 'Medium':
-                return ['background-color: #fff4cc'] * len(row)
+                return ['background-color: rgba(245, 158, 11, 0.12); color: #FFE0A3'] * len(row)
             else:
-                return ['background-color: #ccffcc'] * len(row)
+                return ['background-color: rgba(16, 185, 129, 0.12); color: #A3FFD6'] * len(row)
         
         styled_df = display_df.style.apply(highlight_risk, axis=1)
         st.dataframe(styled_df, use_container_width=True, height=400)
@@ -693,29 +719,27 @@ def main():
             forecast_colors = []
             for cls in top_forecast['forecast_classification']:
                 if cls == 'High':
-                    forecast_colors.append('#d62728')
+                    forecast_colors.append('#F43F5E')
                 elif cls == 'Medium':
-                    forecast_colors.append('#ff7f0e')
+                    forecast_colors.append('#F59E0B')
                 else:
-                    forecast_colors.append('#2ca02c')
-
+                    forecast_colors.append('#10B981')
+ 
             fig_f = go.Figure(data=[go.Bar(
                 y=top_forecast['city'],
                 x=top_forecast['forecast_risk'],
                 orientation='h',
-                marker=dict(color=forecast_colors),
-                text=[f"{s:.1f}" for s in top_forecast['forecast_risk']],
+                marker=dict(color=forecast_colors, line=dict(color='rgba(0,0,0,0)', width=0)),
+                text=[f" {s:.1f}" for s in top_forecast['forecast_risk']],
                 textposition='outside',
                 hovertemplate='<b>%{y}</b><br>Forecast: %{x:.1f}<extra></extra>',
             )])
+            apply_premium_plotly_layout(fig_f, height=450)
             fig_f.update_layout(
                 xaxis_title="Forecast Risk Score",
-                height=450,
                 showlegend=False,
-                xaxis_range=[0, 100],
-                margin=dict(l=150, r=50, t=20, b=50),
-                plot_bgcolor='rgba(0,0,0,0)',
-                paper_bgcolor='rgba(0,0,0,0)',
+                xaxis_range=[0, 107], # Extra padding for text labels
+                margin=dict(l=110, r=20, t=10, b=40),
             )
             st.markdown("**Top 15 Cities — Tomorrow's Forecast**")
             st.plotly_chart(fig_f, use_container_width=True)
