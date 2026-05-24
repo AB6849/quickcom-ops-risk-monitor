@@ -22,10 +22,11 @@ A professional, interview-ready dashboard for the India Quick-Commerce Operation
 - Date selector for historical views
 
  **Professional Design**
-- Clean, modern UI
-- Color-coded risk levels
+- Clean, modern Light Theme UI with Slate typography
+- High-contrast color-coded risk levels (rose, amber, emerald)
 - Responsive layout
 - Export capabilities
+- Accessibly designed elements prioritizing legibility
 
 ## Quick Start
 
@@ -182,13 +183,13 @@ Create a cron job or scheduled task:
 
 ### Change Colors
 
-Edit `dashboard.py` and modify the color mappings:
+Edit `dashboard.py` and modify the color mappings (currently optimized for light theme high-contrast visibility):
 
 ```python
 color_discrete_map={
-    'High': '#d62728',    # Red
-    'Medium': '#ff7f0e',  # Orange
-    'Low': '#2ca02c'      # Green
+    'High': '#E11D48',    # Rose Red
+    'Medium': '#D97706',  # Amber Orange
+    'Low': '#059669'      # Emerald Green
 }
 ```
 
