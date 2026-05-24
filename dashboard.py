@@ -17,6 +17,10 @@ from pathlib import Path
 from datetime import datetime, timedelta
 import sys
 import time
+from dotenv import load_dotenv
+
+# Load env variables from .env file
+load_dotenv()
 
 # Page configuration
 st.set_page_config(

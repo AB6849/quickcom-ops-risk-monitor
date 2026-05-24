@@ -37,7 +37,6 @@ Thumbs.db
 logs/
 
 # Node modules (if any)
-node_modules/
-package-lock.json
-package.json
+# Environment variables
+.env
 

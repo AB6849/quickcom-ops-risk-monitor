@@ -354,6 +354,36 @@ def fetch_traffic_tomtom(api_key=None):
         
         if traffic_data:
             df = pd.DataFrame(traffic_data)
+            
+            # Load existing traffic history to accumulate it
+            history_path = OUTPUT_DIR / 'traffic_india.csv'
+            if history_path.exists():
+                try:
+                    history_df = pd.read_csv(history_path)
+                    # Convert dates to string format to match
+                    history_df['date'] = pd.to_datetime(history_df['date']).dt.strftime('%Y-%m-%d')
+                    
+                    # Remove today's date from history to avoid duplicates
+                    today_str = datetime.now().strftime('%Y-%m-%d')
+                    history_df = history_df[history_df['date'] != today_str]
+                    
+                    # Combine history and today's new data
+                    combined_df = pd.concat([history_df, df], ignore_index=True)
+                    
+                    # Sort by date and city
+                    combined_df = combined_df.sort_values(['date', 'city']).reset_index(drop=True)
+                    
+                    # Keep only the last 30 days of data per city to prevent file bloat
+                    unique_dates = sorted(combined_df['date'].unique())
+                    if len(unique_dates) > 30:
+                        keep_dates = unique_dates[-30:]
+                        combined_df = combined_df[combined_df['date'].isin(keep_dates)].reset_index(drop=True)
+                    
+                    df = combined_df
+                    print(f"Combined live TomTom traffic with existing history (total {len(df)} records)")
+                except Exception as ex:
+                    print(f"[WARNING] Could not merge traffic history: {ex}")
+            
             print(f"[OK] Traffic data fetched: {len(df)} records")
             return df
     

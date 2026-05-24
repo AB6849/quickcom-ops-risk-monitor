@@ -18,6 +18,10 @@ import logging
 import sys
 from pathlib import Path
 import pandas as pd
+from dotenv import load_dotenv
+
+# Load env variables from .env file
+load_dotenv()
 
 logging.basicConfig(
     level=logging.INFO,
