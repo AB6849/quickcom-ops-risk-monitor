@@ -93,7 +93,7 @@ def compute_weather_risk_score(rainfall_mm: float, rainfall_7d_avg: float,
     - Heavy rainfall (>30mm) severely impacts delivery operations
     - Moderate rainfall (15-30mm) causes delays
     - Light rainfall (<5mm) has minimal impact
-    - Extreme temperatures also affect operations
+    - Extreme temperatures (heatwaves >= 40°C, cold <= 10°C) independently affect operations
     
     Args:
         rainfall_mm: Current day rainfall in mm
@@ -110,36 +110,48 @@ def compute_weather_risk_score(rainfall_mm: float, rainfall_7d_avg: float,
     if effective_rainfall >= WEATHER_THRESHOLDS['high']:
         # Critical rainfall: 70-100 points
         excess = (effective_rainfall - WEATHER_THRESHOLDS['high']) / 50.0  # Assume max ~80mm
-        score = 70 + (min(excess, 1.0) * 30)
+        rain_score = 70 + (min(excess, 1.0) * 30)
     elif effective_rainfall >= WEATHER_THRESHOLDS['medium']:
         # High rainfall: 40-70 points
         excess = (effective_rainfall - WEATHER_THRESHOLDS['medium']) / (
             WEATHER_THRESHOLDS['high'] - WEATHER_THRESHOLDS['medium']
         )
-        score = 40 + (excess * 30)
+        rain_score = 40 + (excess * 30)
     elif effective_rainfall >= WEATHER_THRESHOLDS['low']:
         # Medium rainfall: 15-40 points
         excess = (effective_rainfall - WEATHER_THRESHOLDS['low']) / (
             WEATHER_THRESHOLDS['medium'] - WEATHER_THRESHOLDS['low']
         )
-        score = 15 + (excess * 25)
+        rain_score = 15 + (excess * 25)
     else:
         # Low rainfall: 0-15 points
         excess = effective_rainfall / WEATHER_THRESHOLDS['low']
-        score = excess * 15
+        rain_score = excess * 15
     
-    # Temperature risk component (additive)
-    temp_risk = 0
-    if temperature <= TEMPERATURE_THRESHOLDS['cold_risk']:
-        # Cold weather risk: add up to 10 points
-        temp_risk = (TEMPERATURE_THRESHOLDS['cold_risk'] - temperature) / 10.0 * 10
-    elif temperature >= TEMPERATURE_THRESHOLDS['hot_risk']:
-        # Extreme heat risk: add up to 15 points
-        temp_risk = (temperature - TEMPERATURE_THRESHOLDS['hot_risk']) / 10.0 * 15
+    # Temperature risk component (0-100 scale)
+    temp_score = 0.0
+    if temperature >= TEMPERATURE_THRESHOLDS['hot_risk']:
+        # Extreme heat: >= 40°C
+        if temperature >= 48.0:
+            temp_score = 100.0
+        else:
+            temp_score = 50.0 + (temperature - TEMPERATURE_THRESHOLDS['hot_risk']) / 8.0 * 50.0
+    elif temperature >= 35.0:
+        # Elevated heat: 35-40°C
+        temp_score = (temperature - 35.0) / 5.0 * 50.0
+    elif temperature <= TEMPERATURE_THRESHOLDS['cold_risk']:
+        # Extreme cold: <= 10°C
+        if temperature <= 0.0:
+            temp_score = 100.0
+        else:
+            temp_score = 20.0 + (TEMPERATURE_THRESHOLDS['cold_risk'] - temperature) / 10.0 * 60.0
+    elif temperature <= 15.0:
+        # Cool/Cold: 10-15°C
+        temp_score = (15.0 - temperature) / 5.0 * 20.0
     
-    # Combine rainfall and temperature risks (capped at 100)
-    total_score = min(100, score + temp_risk)
-    return total_score
+    # Combine rainfall and temperature risks (capped at 100) using max
+    total_score = max(rain_score, temp_score)
+    return min(100.0, total_score)
 
 
 def compute_demand_risk_score(demand_index: float, demand_7d_avg: float) -> float:
@@ -348,7 +360,12 @@ def _generate_alert_reason(row: pd.Series) -> str:
         reasons.append(f"High traffic congestion ({row['congestion_level']:.2f})")
     
     if row['weather_risk'] >= 60:
-        reasons.append(f"Heavy rainfall ({row['rainfall_mm']:.1f}mm)")
+        if row['rainfall_mm'] >= 15.0 or row.get('rainfall_mm_7d_avg', 0) >= 15.0:
+            reasons.append(f"Heavy rainfall ({row['rainfall_mm']:.1f}mm)")
+        if row['temperature'] >= 40.0 or row['temperature'] <= 10.0:
+            reasons.append(f"Extreme temperature ({row['temperature']:.1f}°C)")
+        if not (row['rainfall_mm'] >= 15.0 or row.get('rainfall_mm_7d_avg', 0) >= 15.0 or row['temperature'] >= 40.0 or row['temperature'] <= 10.0):
+            reasons.append(f"Adverse weather ({row['weather_risk']:.1f})")
     
     if row['demand_risk'] >= 60:
         reasons.append(f"Demand surge ({row['demand_index']:.2f})")

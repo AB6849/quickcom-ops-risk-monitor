@@ -190,29 +190,7 @@ def fetch_weather_openmeteo():
                         temp = (temps_max[i] + temps_min[i]) / 2 if i < len(temps_min) else temps_max[i]
                         rainfall = precip[i] or 0.0
                         
-                        # For some cities, add heavy rainfall days to create High risk scenarios
-                        # Distribute heavy rain across multiple days to ensure High risk on all recent dates
-                        # Use deterministic assignment based on city name for consistency
-                        high_risk_city_list = ['Mumbai', 'Delhi', 'Bangalore', 'Chennai', 'Kolkata',
-                                              'Ahmedabad', 'Jaipur', 'Pune', 'Hyderabad', 'Surat',
-                                              'Jamshedpur', 'Raipur', 'Nashik', 'Varanasi', 'Kolhapur']
-                        
-                        if city in high_risk_city_list:
-                            # Assign each city a consistent "heavy rain day" based on hash
-                            # This ensures the same city gets heavy rain on the same day across runs
-                            city_hash = hash(city) % 8  # 8 days of data
-                            
-                            if i == city_hash or i == 0:  # City's assigned day OR today
-                                if city in ['Mumbai', 'Delhi', 'Bangalore']:  # Major cities
-                                    rainfall = np.random.uniform(40, 65)  # Very heavy rain (High risk)
-                                else:
-                                    rainfall = np.random.uniform(35, 55)  # Heavy rain
-                            elif i == 1:  # Yesterday (Dec 29) - ensure some High risk cities
-                                # Assign ~30% of high-risk cities to have heavy rain on Dec 29
-                                if hash(city) % 3 == 0:  # Deterministic 33% of cities
-                                    rainfall = np.random.uniform(40, 60)  # Very heavy rain
-                                elif np.random.random() < 0.4:  # 40% chance for others
-                                    rainfall = np.random.uniform(30, 50)  # Heavy rain
+
                         
                         weather_data.append({
                             'date': date_str,
@@ -258,17 +236,7 @@ def fetch_weather_openmeteo():
     
     df = pd.DataFrame(weather_data)
     
-    # Ensure some cities have heavy rainfall to create High risk scenarios
-    # Modify today's data for major cities
-    today_str = datetime.now().strftime('%Y-%m-%d')
-    high_risk_cities = ['Mumbai', 'Delhi', 'Bangalore', 'Chennai']
-    
-    for city in high_risk_cities:
-        city_mask = (df['city'] == city) & (df['date'] == today_str)
-        if city_mask.any():
-            # Set heavy rainfall for today to create High risk
-            df.loc[city_mask, 'rainfall_mm'] = np.random.uniform(40, 60)
-            print(f"  [NOTE] {city}: Heavy rain added for High risk scenario")
+
     
     print(f"[OK] Weather data fetched: {len(df)} records")
     return df

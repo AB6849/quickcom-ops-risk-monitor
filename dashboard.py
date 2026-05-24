@@ -341,7 +341,12 @@ def main():
                     if row.get('traffic_risk', 0) >= 60:
                         parts.append(f"High congestion ({row.get('congestion_level', 0):.2f})")
                     if row.get('weather_risk', 0) >= 60:
-                        parts.append(f"Heavy rainfall ({row.get('rainfall_mm', 0):.1f}mm)")
+                        if row.get('rainfall_mm', 0) >= 15.0:
+                            parts.append(f"Heavy rainfall ({row.get('rainfall_mm', 0):.1f}mm)")
+                        if row.get('temperature', 25.0) >= 40.0 or row.get('temperature', 25.0) <= 10.0:
+                            parts.append(f"Extreme temperature ({row.get('temperature', 0):.1f}°C)")
+                        if not (row.get('rainfall_mm', 0) >= 15.0 or row.get('temperature', 25.0) >= 40.0 or row.get('temperature', 25.0) <= 10.0):
+                            parts.append(f"Adverse weather")
                     if row.get('demand_risk', 0) >= 60:
                         parts.append(f"Demand surge ({row.get('demand_index', 0):.2f})")
                     return "; ".join(parts) if parts else "Multiple risk factors combined"
