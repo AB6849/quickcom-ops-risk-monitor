@@ -23,6 +23,8 @@ jobs:
         pip install -r requirements.txt
     
     - name: Run pipeline
+      env:
+        TOMTOM_API_KEY: ${{ secrets.TOMTOM_API_KEY }}
       run: |
         python3 run_pipeline.py
     
